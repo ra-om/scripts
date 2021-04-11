@@ -44,12 +44,7 @@ def swap():
     i3.command('unmark a')
     i3.command('unmark c')
     sys.exit()
-
-if focused.marks == "['b']":
-    i3.command('unmark b')
-    i3.command('unmark a')
-    i3.command('unmark c')
-    sys.exit()
+   
 
 if focused.layout == "tabbed" or focused.layout == "stacked":
     moveInto()
@@ -60,6 +55,12 @@ elif currentMouseX > focusedtotalX or currentMouseX < focusedx:  #outside select
 
 elif currentMouseY > focusedtotalY or currentMouseY < focusedy:
     swap()
+
+elif 'b' in focused.marks:
+    i3.command('unmark b')
+    i3.command('unmark a')
+    i3.command('unmark c')
+    sys.exit()
     
 elif currentMouseX > focusedlt and currentMouseY < focusedut:   #upright, sends up
     i3.command('split v')
