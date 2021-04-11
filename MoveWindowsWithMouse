@@ -27,6 +27,10 @@ focuseddt = math.floor(focusedy + focusedh - (focusedh*0.4)) #bottom 40% of cont
 focusedtotalX = (focusedx + focusedw)
 focusedtotalY = (focusedy + focusedh)
 
+def clean():
+    pyautogui.moveTo(currentMouseX, currentMouseY)
+    sys.exit()
+    
 def moveInto():
     i3.command('mark --toggle c')
     i3.command('[con_mark="b"] focus')
@@ -43,12 +47,12 @@ def swap():
     i3.command('unmark b')
     i3.command('unmark a')
     i3.command('unmark c')
-    sys.exit()
+    clean()
    
 
 if focused.layout == "tabbed" or focused.layout == "stacked":
     moveInto()
-    sys.exit()
+    clean()
     
 elif currentMouseX > focusedtotalX or currentMouseX < focusedx:  #outside selected window frame
     swap()
@@ -60,49 +64,49 @@ elif 'b' in focused.marks:
     i3.command('unmark b')
     i3.command('unmark a')
     i3.command('unmark c')
-    sys.exit()
+    clean()
     
 elif currentMouseX > focusedlt and currentMouseY < focusedut:   #upright, sends up
     i3.command('split v')
     moveInto()
     i3.command('move up')
-    sys.exit()
+    clean()
 
 elif currentMouseX > focusedrt and currentMouseY > focusedut:   #rightdown, sends right
     i3.command('split h')
     moveInto()
-    sys.exit()
+    clean()
     
 elif currentMouseX < focusedrt and currentMouseY > focuseddt:   #downleft, sends down   
     i3.command('split v')
     moveInto()
-    sys.exit()
+    clean()
         
 elif currentMouseX < focusedlt and currentMouseY < focuseddt: #leftup, sends left
     i3.command('split h')
     moveInto()
     i3.command('move left')
-    sys.exit()
+    clean()
         
 elif currentMouseX > focusedr and currentMouseY < focusedd:  #up-right (center square), sends up
     i3.command('split v')
     moveInto()
     i3.command('move up')
-    sys.exit()
+    clean()
         
 elif currentMouseX > focusedl and currentMouseY < focusedd:  #up-left (center square), sends up
     i3.command('split v')
     moveInto()
     i3.command('move up')
-    sys.exit()
+    clean()
 
 elif currentMouseX > focusedr and currentMouseY > focusedd:  #down-right (center square), sends down
     i3.command('split v')
     moveInto()
-    sys.exit()
+    clean()
         
 elif currentMouseX > focusedl and currentMouseY > focusedd:  #down-left (center square), sends down
     i3.command('split v')
     moveInto()   
-    sys.exit()
+    clean()
     
