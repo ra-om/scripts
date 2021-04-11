@@ -1,0 +1,15 @@
+MOUSE_ID=$(xinput list|grep -i mouse|sed -r 's/^.+id=([0-9]+).+$/\1/')  # Get mouse X device ID
+
+i3-msg "mark --toggle b"
+
+while true; do    # Delay until button is released
+    sleep 0.05    
+    STATE1=$(xinput --query-state $MOUSE_ID | grep 'button\[3\]=up' | sort)
+    if [ "$STATE1" != "" ]; then
+    break
+    fi
+done
+
+exec python3 MoveWindowsWithMouse
+
+exit

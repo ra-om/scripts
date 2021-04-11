@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+
+import i3ipc
+import pyautogui
+import math
+import sys
+
+pyautogui.scroll(1)
+pyautogui.scroll(-1)
+
+i3 = i3ipc.Connection()
+focused = i3.get_tree().find_focused()
+currentMouseX, currentMouseY = pyautogui.position()
+
+focusedh = focused.rect.height
+focusedw = focused.rect.width
+focusedx = focused.rect.x
+focusedy = focused.rect.y
+focusedr = math.floor(focusedx+(focusedw/2)) #right half of container
+focusedl = focusedx
+focusedd = math.floor(focusedy+(focusedh/2)) #bottom half of container
+focusedu = focusedy
+focusedrt = math.floor(focusedx + focusedw - (focusedw*0.4))  #right 40% of container
+focusedlt = math.floor(focusedx + (focusedw*0.4))
+focusedut = math.floor(focusedy + (focusedh*0.4))   
+focuseddt = math.floor(focusedy + focusedh - (focusedh*0.4)) #bottom 40% of container
+focusedtotalX = (focusedx + focusedw)
+focusedtotalY = (focusedy + focusedh)
+
+def moveInto():
+    i3.command('mark --toggle c')
+    i3.command('[con_mark="b"] focus')
+    i3.command('move container to mark c')
+    i3.command('[con_mark="b"] focus')
+    i3.command('unmark b')
+    i3.command('unmark c')
+
+def swap():
+    pyautogui.click()
+    i3.command('mark a')
+    i3.command('[con_mark="b"] focus')
+    i3.command('swap container with mark a')
+    i3.command('unmark b')
+    i3.command('unmark a')
+    i3.command('unmark c')
+    sys.exit()
+
+if focused.marks == "['b']":
+    i3.command('unmark b')
+    i3.command('unmark a')
+    i3.command('unmark c')
+    sys.exit()
+
+if focused.layout == "tabbed" or focused.layout == "stacked":
+    moveInto()
+    sys.exit()
+    
+elif currentMouseX > focusedtotalX or currentMouseX < focusedx:  #outside selected window frame
+    swap()
+
+elif currentMouseY > focusedtotalY or currentMouseY < focusedy:
+    swap()
+    
+elif currentMouseX > focusedlt and currentMouseY < focusedut:   #upright, sends up
+    i3.command('split v')
+    moveInto()
+    i3.command('move up')
+    sys.exit()
+
+elif currentMouseX > focusedrt and currentMouseY > focusedut:   #rightdown, sends right
+    i3.command('split h')
+    moveInto()
+    sys.exit()
+    
+elif currentMouseX < focusedrt and currentMouseY > focuseddt:   #downleft, sends down   
+    i3.command('split v')
+    moveInto()
+    sys.exit()
+        
+elif currentMouseX < focusedlt and currentMouseY < focuseddt: #leftup, sends left
+    i3.command('split h')
+    moveInto()
+    i3.command('move left')
+    sys.exit()
+        
+elif currentMouseX > focusedr and currentMouseY < focusedd:  #up-right (center square), sends up
+    i3.command('split v')
+    moveInto()
+    i3.command('move up')
+    sys.exit()
+        
+elif currentMouseX > focusedl and currentMouseY < focusedd:  #up-left (center square), sends up
+    i3.command('split v')
+    moveInto()
+    i3.command('move up')
+    sys.exit()
+
+elif currentMouseX > focusedr and currentMouseY > focusedd:  #down-right (center square), sends down
+    i3.command('split v')
+    moveInto()
+    sys.exit()
+        
+elif currentMouseX > focusedl and currentMouseY > focusedd:  #down-left (center square), sends down
+    i3.command('split v')
+    moveInto()   
+    sys.exit()
+    
