@@ -1,3 +1,5 @@
+#!/bin/bash
+
 MOUSE_ID=$(xinput list|grep -i mouse|sed -r 's/^.+id=([0-9]+).+$/\1/')  # Get mouse X device ID
 
 i3-msg "mark --toggle b"
