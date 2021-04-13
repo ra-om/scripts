@@ -2,7 +2,6 @@
 
 MOUSE_ID=$(xinput list|grep -i mouse|sed -r 's/^.+id=([0-9]+).+$/\1/')  # Get mouse X device ID
 
-xdotool click 1
 i3-msg "mark --toggle b"
 
 while true; do    # Delay until button is released
